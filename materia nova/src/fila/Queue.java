@@ -1,11 +1,26 @@
 package fila;
 
 import stack.Node;
+import java.util.Stack;
 
 public class Queue<T> {
 	private Node<T> head;
 	private Node<T> tail;
 	private int size;
+
+	public void reverse() {
+		Stack<T> stack = new Stack<>();
+		while (!isEmpty()) {
+			try {
+				stack.push(dequeue());
+			} catch (EmptyQueueException e) {
+				e.printStackTrace();
+			}
+		}
+		while (!stack.isEmpty()) {
+			enqueue(stack.pop());
+		}
+	}
 
 	public T dequeue() throws EmptyQueueException {
 		if (this.isEmpty()) {
@@ -30,6 +45,12 @@ public class Queue<T> {
 		}
 		this.tail = tmp;
 		this.size++;
+	}
+
+	public void enqueueAll(T[] elements) {
+		for (T element : elements) {
+			enqueue(element);
+		}
 	}
 
 	public int size() {
@@ -60,22 +81,25 @@ public class Queue<T> {
 
 	public static void main(String[] args) {
 		Queue<String> q = new Queue<String>();
-		q.enqueue("a");
+		String[] initialElements = {"a", "b", "c"};
+		q.enqueueAll(initialElements);
+		q.enqueue("d");
 		System.out.println(q.toString());
-		q.enqueue("b");
+		q.enqueue("e");
 		System.out.println(q.toString());
-		q.enqueue("c");
+		q.enqueue("f");
 		System.out.println(q.toString());
-
+		q.reverse();
+		System.out.println(q.toString());
 		try {
 			System.out.println(q.dequeue());
+			System.out.println(q.toString());
 			System.out.println(q.dequeue());
 			System.out.println(q.dequeue());
 		} catch (EmptyQueueException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(q.toString());
 	}
 
 }
